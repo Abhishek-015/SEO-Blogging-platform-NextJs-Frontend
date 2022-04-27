@@ -4,7 +4,6 @@ const Layout = ({ children }) => {
     <>
       <Header />
       {children}
-      <h4>Footer</h4>
     </>
   );
 };

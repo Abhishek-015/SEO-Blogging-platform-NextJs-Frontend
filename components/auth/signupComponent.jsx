@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { signup } from "../../actions/auth";
 
 const SignupComponent = () => {
   const [values, setValues] = useState({
-    name: "Abhishek",
-    email: "abhi@gmail.com",
-    password: "123456",
+    name: "",
+    email: "",
+    password: "",
     error: "",
     loading: false,
     message: "",
@@ -17,9 +18,35 @@ const SignupComponent = () => {
     const { name, value } = e.target;
     setValues({ ...values, error: false, [name]: value });
   };
+
+  const showLoading = () =>
+    loading ? <div className="alert alert-info">Loading...</div> : "";
+  const showError = () =>
+    error ? <div className="alert alert-danger">{error}</div> : "";
+  const showMessage = () =>
+    message ? <div className="alert alert-success">{message}</div> : "";
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table({ name, email, password, error, loading, message, showForm });
+    // console.table({ name, email, password, error, loading, message, showForm });
+    setValues({ ...values, error: false, loading: true });
+    const user = { name, email, password };
+    signup(user).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, loading: false });
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          email: "",
+          password: "",
+          loading: false,
+          error: "",
+          message: data.message,
+          showForm: false,
+        });
+      }
+    });
   };
 
   const signupForm = () => {
@@ -60,13 +87,25 @@ const SignupComponent = () => {
           />
         </div>
         <div>
-          <button className="btn btn-primary btn-sm">Sign up</button>
+          <button
+            disabled={!name || !email || !password}
+            className="btn btn-primary btn-sm"
+          >
+            Sign up
+          </button>
         </div>
       </form>
     );
   };
 
-  return <>{signupForm()}</>;
+  return (
+    <>
+      {showError()}
+      {showLoading()}
+      {showMessage()}
+      {showForm && signupForm()}
+    </>
+  );
 };
 
 export default SignupComponent;
