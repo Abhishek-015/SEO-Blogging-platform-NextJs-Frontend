@@ -1,10 +1,12 @@
 import Layout from "../components/Layout";
+import SignupComponent from "../components/auth/signupComponent";
+
 const Signup = () => {
   return (
-      <Layout>
-          Signup page
-          <a href="/"></a>
-      </Layout>
-  )
+    <Layout>
+      <h2>Signup page</h2>
+      <SignupComponent />
+    </Layout>
+  );
 };
 export default Signup;
