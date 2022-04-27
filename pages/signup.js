@@ -1,10 +1,10 @@
 import Layout from "../components/Layout";
-import SignupComponent from "../components/auth/signupComponent";
+import SignupComponent from "../components/auth/SignupComponent";
 
 const Signup = () => {
   return (
     <Layout>
-      <h3 className="text-center">Signup page</h3>
+      <h3 className="text-center my-4">Signup page</h3>
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <SignupComponent />
