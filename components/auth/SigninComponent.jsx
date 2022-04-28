@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { authenticate, signin } from "../../actions/auth";
+import { useState, useEffect } from "react";
+import { authenticate, isAuth, signin } from "../../actions/auth";
 import Router from "next/router";
 
 const SigninComponent = () => {
@@ -11,6 +11,12 @@ const SigninComponent = () => {
     message: "",
     showForm: true,
   });
+
+  useEffect(() => {
+    if (isAuth) {
+      Router.push(`/`);
+    }
+  }, []);
 
   const { email, password, error, loading, message, showForm } = values;
 
@@ -75,7 +81,7 @@ const SigninComponent = () => {
             disabled={!email || !password}
             className="btn btn-primary btn-sm"
           >
-            Sign up
+            Sign in
           </button>
         </div>
       </form>

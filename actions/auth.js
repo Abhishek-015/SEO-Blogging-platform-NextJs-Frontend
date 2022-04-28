@@ -32,8 +32,13 @@ export const signin = (user) => {
     .catch((err) => console.log(err));
 };
 
-//set cookie
+export const signout = (next) => {
+  removeCookie("token");
+  removeLocalStorage("user");
+  next();
+};
 
+//set cookie
 export const setCookie = (key, value) => {
   if (process.browser) {
     cookie.set(key, value, {
@@ -54,13 +59,13 @@ export const removeCookie = (key, value) => {
 //get cookie
 export const getCookie = (key) => {
   if (process.browser) {
-    cookie.get(key);
+   return cookie.get(key);
   }
 };
 //local storage
 export const setLocalStorage = (key, value) => {
   if (process.browser) {
-    localStorage.setItem(key,JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(value));
   }
 };
 export const removeLocalStorage = (key) => {
