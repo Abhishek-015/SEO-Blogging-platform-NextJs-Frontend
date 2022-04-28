@@ -12,9 +12,9 @@ const SigninComponent = () => {
     showForm: true,
   });
 
-  useEffect(() => isAuth() && Router.push(`/`), []);
-
   const { email, password, error, loading, message, showForm } = values;
+
+  useEffect(() => isAuth() && Router.push(`/`), []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

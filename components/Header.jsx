@@ -31,7 +31,7 @@ const Header = () => {
         </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav style={{ display: "flex" }} className="ml-auto " navbar>
+          <Nav className="ml-auto" navbar>
             {!isAuth() && (
               <>
                 <NavItem>

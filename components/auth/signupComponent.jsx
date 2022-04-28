@@ -13,9 +13,9 @@ const SignupComponent = () => {
     showForm: true,
   });
 
-  useEffect(() => isAuth() && Router.push(`/`), []);
-
   const { name, email, password, error, loading, message, showForm } = values;
+
+  useEffect(() => isAuth() && Router.push(`/`), []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
