@@ -12,11 +12,7 @@ const SigninComponent = () => {
     showForm: true,
   });
 
-  useEffect(() => {
-    if (isAuth) {
-      Router.push(`/`);
-    }
-  }, []);
+  useEffect(() => isAuth() && Router.push(`/`), []);
 
   const { email, password, error, loading, message, showForm } = values;
 
@@ -44,7 +40,11 @@ const SigninComponent = () => {
         //save user info to local storage
         //authenticate user
         authenticate(data, () => {
-          Router.push(`/`);
+          if (isAuth() && isAuth().role === 1) {
+            Router.push("/admin");
+          } else {
+            Router.push("/user");
+          }
         });
       }
     });
