@@ -102,10 +102,35 @@ const Category = () => {
     });
   };
 
+  const showSuccess = () => {
+    if (success) {
+      return (
+        <div className=" alert alert-success">
+          Category Created successFully
+        </div>
+      );
+    }
+  };
+  const showError = () => {
+    if (error) {
+      return <div className="alert alert-danger">Category already exist</div>;
+    }
+  };
+  const showRemoved = () => {
+    if (removed) {
+      return <div className="alert alert-danger">Category is removed</div>;
+    }
+  };
+
+  //to clear out the notification display above the div
+  const mouseMoveHandler = (e) => {
+    setValues({ ...values, error: false, success: false, removed: "" });
+  };
+
   const newCategoryForm = () => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label className="text-muted">Name</label>
+        <label className="text-muted my-1">Name</label>
         <input
           type="text"
           className="form-control"
@@ -118,10 +143,16 @@ const Category = () => {
       </div>
     </form>
   );
+
   return (
     <>
-      {newCategoryForm()}
-      <div>{showCategories()}</div>
+      {showSuccess()}
+      {showError()}
+      {showRemoved()}
+      <div onMouseMove={mouseMoveHandler}>
+        {newCategoryForm()}
+        {showCategories()}
+      </div>
     </>
   );
 };
