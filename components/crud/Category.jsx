@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { isAuth, getCookie } from "../../actions/auth";
-import { create } from "../../actions/category";
+import {
+  createCategory,
+  getCategories,
+  removeCategory,
+} from "../../actions/category";
 
 const Category = () => {
   const [values, setValues] = useState({
@@ -11,18 +15,79 @@ const Category = () => {
     success: false,
     categories: [],
     removed: false,
+    reload: false, // to control the behavioue of useEffect
   });
 
-  const { name, error, success, categories, removed } = values;
+  const { name, error, success, categories, removed, reload } = values;
   const token = getCookie("token");
+
+  useEffect(() => {
+    loadCategories();
+  }, [reload]);
+
+  const loadCategories = () => {
+    getCategories().then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setValues({ ...values, categories: data });
+      }
+    });
+  };
+
+  const showCategories = () => {
+    return categories.map((category) => (
+      <button
+        onClick={() => deleteConfirm(category.slug)}
+        title="Double click to delete"
+        key={category._id}
+        className="btn btn-outline-success btn-sm mx-1 mt-3"
+      >
+        {category.name}
+      </button>
+    ));
+  };
+
+  const deleteConfirm = (slug) => {
+    let answer = window.confirm(
+      "Are you sure ,you want to delete this category?"
+    );
+    if (answer) {
+      deleteCategory(slug);
+    }
+  };
+
+  const deleteCategory = (slug) => {
+    //   console.log("deleted",slug)
+    removeCategory(slug, token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setValues({
+          ...values,
+          error: false,
+          success: false,
+          name: "",
+          removed: !removed,
+          reload: !reload,
+        });
+      }
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    create({ name }, token).then((data) => {
+    createCategory({ name }, token).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error, success: false });
       } else {
-        setValues({ ...values, error: false, success: true, name: "" });
+        setValues({
+          ...values,
+          error: false,
+          success: true,
+          name: "",
+          reload: !reload,
+        });
       }
     });
   };
@@ -33,6 +98,7 @@ const Category = () => {
       error: false,
       success: false,
       removed: "",
+      reload: false,
     });
   };
 
@@ -52,7 +118,12 @@ const Category = () => {
       </div>
     </form>
   );
-  return <>{newCategoryForm()}</>;
+  return (
+    <>
+      {newCategoryForm()}
+      <div>{showCategories()}</div>
+    </>
+  );
 };
 
 export default Category;
